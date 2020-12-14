@@ -21,41 +21,41 @@ runs:
       id: build_info
       run: |
         echo "##[set-output name=build_number;]$GITHUB_RUN_NUMBER"
-        echo "##[set-output name=component_version;]$(jq -r '.version' ${{ github.action_path }}/package.json)"
-        echo "##[set-output name=component_name;]$(jq -r '.name' ${{ github.action_path }}/component.json)"
+        echo "##[set-output name=component_version;]$(jq -r '.version' ./package.json)"
+        echo "##[set-output name=component_name;]$(jq -r '.name' ./component.json)"
       shell: bash
    
     - name: Retrieve shared build scripts
       run: |
         git clone git@github.com:nov-pocs/max-devops.git
-        cp max-devops/script-cicd-ps/docker/publish.ps1 ${{ github.action_path }}/publish.ps1
-        cp max-devops/script-cicd-ps/node/release.ps1 ${{ github.action_path }}/release.ps1
+        cp max-devops/script-cicd-ps/docker/publish.ps1 ./publish.ps1
+        cp max-devops/script-cicd-ps/node/release.ps1 ./release.ps1
       shell: bash
 
     ############# Build and test #############
     
     - name: Build the component
-      run: ${{ github.action_path }}/build.ps1
+      run: ./build.ps1
       shell: bash
 
     - name: Test the component
-      run: ${{ github.action_path }}/test.ps1
+      run: ./test.ps1
       shell: bash
 
     ############# Release #############
 
     - name: Package runtime docker container
-      run: ${{ github.action_path }}/package.ps1
+      run: ./package.ps1
       env:
         DOCKER_IP: 172.17.0.1
       shell: bash
 
     - name: Publish runtime docker container
-      run: ${{ github.action_path }}/publish.ps1
+      run: ./publish.ps1
       shell: bash
 
     - name: Release binary artifacts
-      run: ${{ github.action_path }}/release.ps1
+      run: ./release.ps1
       shell: bash
 
     ############# Deploy #############
@@ -68,6 +68,6 @@ runs:
 
     # - name: Clean temporary build artifacts
     #   if: ${{ always() }}
-    #   run: ${{ github.action_path }}/clean.ps1
+    #   run: ./clean.ps1
     #   shell: bash
     
