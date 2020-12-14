@@ -33,13 +33,6 @@ runs:
 
     ############# Release #############
 
-    - name: Tag branch with the build number
-      uses: tvdias/github-tagger@v0.0.1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        tag: "${{ steps.build_info.outputs.component_name }}/v${{ steps.build_info.outputs.component_version }}-${{ steps.build_info.outputs.build_number }}"
-      shell: bash
-
     - name: Package runtime docker container
       run: ${{ github.action_path }}/package.ps1
       env:
@@ -62,8 +55,8 @@ runs:
 
     ############# Clear #############
 
-    - name: Clean temporary build artifacts
-      if: ${{ always() }}
-      run: ${{ github.action_path }}/clean.ps1
-      shell: bash
+    # - name: Clean temporary build artifacts
+    #   if: ${{ always() }}
+    #   run: ${{ github.action_path }}/clean.ps1
+    #   shell: bash
     
