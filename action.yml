@@ -1,5 +1,16 @@
 name: GitHub action for pipeline microservice in Node.js
 
+outputs:
+  build_number: 
+    description: "Build number"
+    value: ${{ steps.build_info.outputs.build_number }}
+  component_version: 
+    description: "Component version"
+    value: ${{ steps.build_info.outputs.component_version }}
+  component_name: 
+    description: "Component name"
+    value: ${{ steps.build_info.outputs.component_name }}
+
 runs:
   using: "composite"
   steps: 
