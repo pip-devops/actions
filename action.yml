@@ -1,0 +1,59 @@
+name: GitHub action for pipeline microservice in Node.js
+
+runs:
+  using: "composite"
+  steps: 
+  
+    ############# Prepare #############
+
+    - name: Save build number and component version
+      id: build_info
+      run: |
+        echo "##[set-output name=build_number;]$GITHUB_RUN_NUMBER"
+        echo "##[set-output name=component_version;]$(jq -r '.version' ${{ github.action_path }}/package.json)"
+        echo "##[set-output name=component_name;]$(jq -r '.name' ${{ github.action_path }}/component.json)"
+   
+    - name: Retrieve shared build scripts
+      run: |
+        git clone git@github.com:nov-pocs/max-devops.git
+        cp max-devops/script-cicd-ps/docker/publish.ps1 ${{ github.action_path }}/publish.ps1
+        cp max-devops/script-cicd-ps/node/release.ps1 ${{ github.action_path }}/release.ps1
+
+    ############# Build and test #############
+    
+    - name: Build the component
+      run: ${{ github.action_path }}/build.ps1
+
+    - name: Test the component
+      run: ${{ github.action_path }}/test.ps1
+
+    ############# Release #############
+
+    - name: Tag branch with the build number
+      uses: tvdias/github-tagger@v0.0.1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        tag: "${{ steps.build_info.outputs.component_name }}/v${{ steps.build_info.outputs.component_version }}-${{ steps.build_info.outputs.build_number }}"
+
+    - name: Package runtime docker container
+      run: ${{ github.action_path }}/package.ps1
+      env:
+        DOCKER_IP: 172.17.0.1
+
+    - name: Publish runtime docker container
+      run: ${{ github.action_path }}/publish.ps1
+
+    - name: Release binary artifacts
+      run: ${{ github.action_path }}/release.ps1
+
+    ############# Deploy #############
+
+    - name: Deploy component into the Stage environment
+      run: echo "Deploying to stage"
+
+    ############# Clear #############
+
+    - name: Clean temporary build artifacts
+      if: ${{ always() }}
+      run: ${{ github.action_path }}/clean.ps1
+    
