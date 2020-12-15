@@ -20,49 +20,57 @@ runs:
     - name: Save build number and component version
       id: build_info
       run: |
-        echo "##[set-output name=build_number;]$GITHUB_RUN_NUMBER"
-        echo "##[set-output name=component_version;]$(jq -r '.version' ./package.json)"
-        echo "##[set-output name=component_name;]$(jq -r '.name' ./component.json)"
+        echo "command from custom action"
+        pwd
+        ls
       shell: bash
+
+    # - name: Save build number and component version
+    #   id: build_info
+    #   run: |
+    #     echo "##[set-output name=build_number;]$GITHUB_RUN_NUMBER"
+    #     echo "##[set-output name=component_version;]$(jq -r '.version' ./package.json)"
+    #     echo "##[set-output name=component_name;]$(jq -r '.name' ./component.json)"
+    #   shell: bash
    
-    - name: Retrieve shared build scripts
-      run: |
-        git clone git@github.com:nov-pocs/max-devops.git
-        cp max-devops/script-cicd-ps/docker/publish.ps1 ./publish.ps1
-        cp max-devops/script-cicd-ps/node/release.ps1 ./release.ps1
-      shell: bash
+    # - name: Retrieve shared build scripts
+    #   run: |
+    #     git clone git@github.com:nov-pocs/max-devops.git
+    #     cp max-devops/script-cicd-ps/docker/publish.ps1 ./publish.ps1
+    #     cp max-devops/script-cicd-ps/node/release.ps1 ./release.ps1
+    #   shell: bash
 
-    ############# Build and test #############
+    # ############# Build and test #############
     
-    - name: Build the component
-      run: ./build.ps1
-      shell: bash
+    # - name: Build the component
+    #   run: ./build.ps1
+    #   shell: bash
 
-    - name: Test the component
-      run: ./test.ps1
-      shell: bash
+    # - name: Test the component
+    #   run: ./test.ps1
+    #   shell: bash
 
-    ############# Release #############
+    # ############# Release #############
 
-    - name: Package runtime docker container
-      run: ./package.ps1
-      env:
-        DOCKER_IP: 172.17.0.1
-      shell: bash
+    # - name: Package runtime docker container
+    #   run: ./package.ps1
+    #   env:
+    #     DOCKER_IP: 172.17.0.1
+    #   shell: bash
 
-    - name: Publish runtime docker container
-      run: ./publish.ps1
-      shell: bash
+    # - name: Publish runtime docker container
+    #   run: ./publish.ps1
+    #   shell: bash
 
-    - name: Release binary artifacts
-      run: ./release.ps1
-      shell: bash
+    # - name: Release binary artifacts
+    #   run: ./release.ps1
+    #   shell: bash
 
-    ############# Deploy #############
+    # ############# Deploy #############
 
-    - name: Deploy component into the Stage environment
-      run: echo "Deploying to stage"
-      shell: bash
+    # - name: Deploy component into the Stage environment
+    #   run: echo "Deploying to stage"
+    #   shell: bash
 
     ############# Clear #############
 
