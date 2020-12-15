@@ -35,6 +35,7 @@ runs:
     - name: Remove other components
       run: |
          ls | grep -v ${{ inputs.name }} | xargs -I{} rm -rf /{} 
+      shell: bash
 
     - name: Save build number and component version
       id: build_info
