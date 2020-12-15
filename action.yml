@@ -22,16 +22,6 @@ runs:
   
     ############# Prepare #############
 
-    # - name: Save build number and component version
-    #   id: build_info
-    #   run: |
-    #     echo "command from custom action"
-    #     pwd
-    #     ls
-    #     cd ${{ inputs.name }}
-    #     ls
-    #   shell: bash
-
     - name: Remove other components
       run: |
          ls | grep -v ${{ inputs.name }} | xargs -I{} rm -rf /{} 
@@ -55,27 +45,37 @@ runs:
     ############# Build and test #############
     
     - name: Build the component
-      run: ${{ inputs.name }}/build.ps1
+      run: |
+        cd ${{ inputs.name }}
+        ./build.ps1
       shell: bash
 
     - name: Test the component
-      run: ${{ inputs.name }}/test.ps1
+      run: |
+        cd ${{ inputs.name }}
+        ./test.ps1
       shell: bash
 
     ############# Release #############
 
     - name: Package runtime docker container
-      run: ${{ inputs.name }}/package.ps1
+      run: |
+        cd ${{ inputs.name }}
+        ./package.ps1
       env:
         DOCKER_IP: 172.17.0.1
       shell: bash
 
     - name: Publish runtime docker container
-      run: ${{ inputs.name }}/publish.ps1
+      run: |
+        cd ${{ inputs.name }}
+        ./publish.ps1
       shell: bash
 
     - name: Release binary artifacts
-      run: ${{ inputs.name }}/release.ps1
+      run: |
+        cd ${{ inputs.name }}
+        ./release.ps1
       shell: bash
 
     ############# Deploy #############
@@ -88,6 +88,8 @@ runs:
 
     # - name: Clean temporary build artifacts
     #   if: ${{ always() }}
-    #   run: ${{ inputs.name }}/clean.ps1
+    #   run: |
+    #    cd ${{ inputs.name }}
+    #    ./clean.ps1
     #   shell: bash
     
