@@ -1,5 +1,10 @@
 name: GitHub action for pipeline microservice in Node.js
 
+input:
+  name:
+    description: 'Folder name of microservice'
+    required: true
+
 outputs:
   build_number: 
     description: "Build number"
@@ -22,6 +27,8 @@ runs:
       run: |
         echo "command from custom action"
         pwd
+        ls
+        cd ${{ inputs.name }}
         ls
       shell: bash
 
