@@ -1,5 +1,16 @@
 name: GitHub action release for pipeline in Node.js
 
+inputs:
+  npm-user:
+    description: 'Username of npm account to create release'
+    required: true
+  npm-pass:
+    description: 'Password of npm account to create release'
+    required: true
+  npm-email:
+    description: 'Email of npm account to create release'
+    required: true
+
 runs:
   using: "composite"
   steps: 
@@ -8,4 +19,8 @@ runs:
 
     - name: Release binary artifacts
       run: ./release.ps1
+      env:
+        NPM_USER: ${{ inputs.npm-user }}
+        NPM_PASS: ${{ inputs.npm-pass }}
+        NPM_EMAIL: ${{ inputs.npm-email }}
       shell: bash

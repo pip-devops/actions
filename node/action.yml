@@ -1,5 +1,16 @@
 name: GitHub action for pipeline in Node.js
 
+inputs:
+  npm-user:
+    description: 'Username of npm account to create release'
+    required: true
+  npm-pass:
+    description: 'Password of npm account to create release'
+    required: true
+  npm-email:
+    description: 'Email of npm account to create release'
+    required: true
+
 outputs:
   build_number: 
     description: "Build number"
@@ -21,8 +32,8 @@ runs:
       id: build_info
       run: |
         echo "##[set-output name=build_number;]$GITHUB_RUN_NUMBER"
-        echo "##[set-output name=component_version;]$(jq -r '.version' ${{ inputs.name }}/package.json)"
-        echo "##[set-output name=component_name;]$(jq -r '.name' ${{ inputs.name }}/component.json)"
+        echo "##[set-output name=component_version;]$(jq -r '.version' ./package.json)"
+        echo "##[set-output name=component_name;]$(jq -r '.name' ./component.json)"
       shell: bash
    
     - name: Install powershell
@@ -55,6 +66,10 @@ runs:
 
     - name: Release binary artifacts
       run: ./release.ps1
+      env:
+        NPM_USER: ${{ inputs.npm-user }}
+        NPM_PASS: ${{ inputs.npm-pass }}
+        NPM_EMAIL: ${{ inputs.npm-email }}
       shell: bash
 
     ############# Clear #############
