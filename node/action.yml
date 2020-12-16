@@ -44,6 +44,7 @@ runs:
         sudo dpkg -i packages-microsoft-prod.deb
         sudo apt-get update
         sudo apt-get install -y powershell
+      shell: bash
 
     - name: Install npm cli and node
       run: |
@@ -51,6 +52,7 @@ runs:
         curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
         sudo apt-get install nodejs
         sudo npm install -g npm-cli-adduser
+      shell: bash
 
     ############# Build and test #############
     
