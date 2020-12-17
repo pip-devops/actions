@@ -1,14 +1,14 @@
-name: Pip.Services GitHub Actions Node
+name: Pip.Services GitHub Actions .NET
 
 on: 
   push:
     paths:
-    - 'node/**'
-    - '.github/workflows/cicd-action-node.yml' 
+    - 'dotnet/**'
+    - '.github/workflows/cicd-action-dotnet.yml' 
 
 defaults:
   run:
-    working-directory: node
+    working-directory: dotnet
 
 jobs:
   Default:
@@ -29,7 +29,7 @@ jobs:
       uses: dev-drprasad/delete-tag-and-release@v0.1.2
       with:
         delete_release: true
-        tag_name: "node-v${{ steps.build_info.outputs.version }}"
+        tag_name: "dotnet-v${{ steps.build_info.outputs.version }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -39,4 +39,4 @@ jobs:
       uses: tvdias/github-tagger@v0.0.1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        tag: "node-v${{ steps.build_info.outputs.version }}"
+        tag: "dotnet-v${{ steps.build_info.outputs.version }}"

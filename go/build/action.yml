@@ -1,0 +1,11 @@
+name: GitHub action build for pipeline in Go
+
+runs:
+  using: "composite"
+  steps: 
+
+    ############# Build #############
+    
+    - name: Build the component
+      run: ./build.ps1
+      shell: bash

@@ -1,0 +1,12 @@
+name: GitHub action test for pipeline in Go
+
+runs:
+  using: "composite"
+  steps: 
+
+    ############# Test #############
+
+    - name: Test the component
+      run: ./test.ps1
+      shell: bash
+    

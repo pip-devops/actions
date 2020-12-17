@@ -1,0 +1,12 @@
+name: GitHub action clear for pipeline in Go
+
+runs:
+  using: "composite"
+  steps: 
+
+    ############# Clear #############
+
+    - name: Clean temporary build artifacts
+      run: ./clean.ps1
+      shell: bash
+    
