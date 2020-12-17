@@ -1,0 +1,40 @@
+name: Pip.Services AWS toolkit in Node.js
+
+on: 
+  push:
+    paths:
+    - 'node/**'
+
+defaults:
+  run:
+    working-directory: node
+
+jobs:
+  Default:
+    runs-on: ubuntu-16.04
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+    steps:
+    - uses: actions/checkout@main
+  
+    ############# Prepare #############
+
+    - name: Save build number and component version
+      id: build_info
+      run: echo "##[set-output name=version;]$(jq -r '.version' ./component.json)"
+
+    ############# Build and test #############
+
+    - uses: dev-drprasad/delete-tag-and-release@v0.1.2
+      with:
+        delete_release: true
+        tag_name: "v${{ steps.build_info.outputs.version }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    ############# Tag #############
+
+    - name: Tag branch with the build number
+      uses: tvdias/github-tagger@v0.0.1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        tag: "v${{ steps.build_info.outputs.version }}"
