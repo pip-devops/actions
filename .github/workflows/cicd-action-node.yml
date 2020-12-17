@@ -1,9 +1,10 @@
-name: Pip.Services AWS toolkit in Node.js
+name: Pip.Services GitHub Actions Node
 
 on: 
   push:
     paths:
     - 'node/**'
+    - '.github/workflows/cicd-action-node.yml' 
 
 defaults:
   run:
@@ -22,9 +23,10 @@ jobs:
       id: build_info
       run: echo "##[set-output name=version;]$(jq -r '.version' ./component.json)"
 
-    ############# Build and test #############
+    ############# Remove tag #############
 
-    - uses: dev-drprasad/delete-tag-and-release@v0.1.2
+    - name: Delete existing tag
+      uses: dev-drprasad/delete-tag-and-release@v0.1.2
       with:
         delete_release: true
         tag_name: "v${{ steps.build_info.outputs.version }}"
@@ -33,7 +35,7 @@ jobs:
 
     ############# Tag #############
 
-    - name: Tag branch with the build number
+    - name: Release action
       uses: tvdias/github-tagger@v0.0.1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
