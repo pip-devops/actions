@@ -1,14 +1,9 @@
-name: Pip.Services GitHub Actions Go
+name: Pip.Services GitHub Actions
 
 on: 
   push:
     paths:
-    - 'go/**'
-    - '.github/workflows/cicd-action-go.yml' 
-
-defaults:
-  run:
-    working-directory: go
+    - '**'
 
 jobs:
   Default:
@@ -29,7 +24,7 @@ jobs:
       uses: dev-drprasad/delete-tag-and-release@v0.1.2
       with:
         delete_release: true
-        tag_name: "go-v${{ steps.build_info.outputs.version }}"
+        tag_name: "v${{ steps.build_info.outputs.version }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -39,4 +34,4 @@ jobs:
       uses: tvdias/github-tagger@v0.0.1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        tag: "go-v${{ steps.build_info.outputs.version }}"
+        tag: "v${{ steps.build_info.outputs.version }}"
