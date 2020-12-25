@@ -1,0 +1,22 @@
+name: GitHub action release for pipeline in Python
+
+inputs:
+  pypi-user:
+    description: 'Username of pypi.org account to create a release'
+    required: true
+  pypi-pass:
+    description: 'Password of pypi.org account to create a release'
+    required: true
+
+runs:
+  using: "composite"
+  steps: 
+  
+    ############# Release #############
+
+    - name: Release binary artifacts
+      run: ./release.ps1
+      env:
+        PYPI_USER: ${{ inputs.pypi-user }}
+        PYPI_PASS: ${{ inputs.pypi-pass }}
+      shell: bash
