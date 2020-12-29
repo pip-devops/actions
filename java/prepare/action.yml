@@ -38,6 +38,5 @@ runs:
     - name: Install maven
       run: |
         sudo apt-get update && sudo apt-get upgrade
-        sudo apt-cache show maven | grep Version
         sudo apt-get -y install maven
       shell: bash
