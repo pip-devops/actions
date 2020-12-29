@@ -1,0 +1,86 @@
+name: GitHub action for pipeline in Java
+
+inputs:
+  m2-user:
+    description: 'Username of mvn account to create release'
+    required: true
+  m2-pass:
+    description: 'Password of mvn account to create release'
+    required: true
+  gpg-keyname:
+    description: 'GPG keyname to create release'
+    required: true
+  gpg-passphrase:
+    description: 'GPG phrase to create release'
+    required: true
+
+outputs:
+  build_number: 
+    description: "Build number"
+    value: ${{ steps.build_info.outputs.build_number }}
+  component_version: 
+    description: "Component version"
+    value: ${{ steps.build_info.outputs.component_version }}
+  component_name: 
+    description: "Component name"
+    value: ${{ steps.build_info.outputs.component_name }}
+
+runs:
+  using: "composite"
+  steps: 
+  
+    ############# Prepare #############
+
+    - name: Save build number and component version
+      id: build_info
+      run: |
+        echo "##[set-output name=build_number;]$GITHUB_RUN_NUMBER"
+        echo "##[set-output name=component_version;]$(jq -r '.version' ./package.json)"
+        echo "##[set-output name=component_name;]$(jq -r '.name' ./component.json)"
+      shell: bash
+   
+    - name: Install powershell
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget apt-transport-https
+        wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        sudo apt-get update
+        sudo apt-get install -y powershell
+      shell: bash
+
+    - name: Install maven
+      run: |
+        sudo apt-get update && sudo apt-get upgrade
+        sudo apt-cache show maven | grep Version
+        sudo apt-get -y install maven
+      shell: bash
+
+    ############# Build and test #############
+    
+    - name: Build the component
+      run: ./build.ps1
+      shell: bash
+
+    - name: Test the component
+      run: ./test.ps1
+      shell: bash
+
+    ############# Release #############
+
+    - name: Release binary artifacts
+      run: ./release.ps1
+      env:
+        M2_USER: ${{ inputs.m2-user }}
+        M2_PASS: ${{ inputs.m2-pass }}
+        GPG_KEYNAME: ${{ inputs.gpg-keyname }}
+        GPG_PASSPHRASE: ${{ inputs.gpg-passphrase }}
+      shell: bash
+
+    ############# Clear #############
+
+    # - name: Clean temporary build artifacts
+    #   if: ${{ always() }}
+    #   run: ./clean.ps1
+    #   shell: bash
+    
