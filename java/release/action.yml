@@ -7,8 +7,11 @@ inputs:
   m2-pass:
     description: 'Password of mvn account to create release'
     required: true
-  gpg-keyname:
-    description: 'GPG keyname to create release'
+  gpg-username:
+    description: 'GPG username to create release'
+    required: true
+  gpg-email:
+    description: 'User email to create release'
     required: true
   gpg-passphrase:
     description: 'GPG phrase to create release'
