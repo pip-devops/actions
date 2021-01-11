@@ -38,7 +38,7 @@ runs:
       id: build_info
       run: |
         echo "##[set-output name=build_number;]$GITHUB_RUN_NUMBER"
-        echo "##[set-output name=component_version;]$(jq -r '.version' ./package.json)"
+        echo "##[set-output name=component_version;]$(jq -r '.version' ./component.json)"
         echo "##[set-output name=component_name;]$(jq -r '.name' ./component.json)"
       shell: bash
    
