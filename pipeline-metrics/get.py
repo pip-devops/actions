@@ -44,17 +44,10 @@ triggered_by = None
 if 'triggering_actor' in latest_run_data:
   triggered_by = f"{latest_run_data['triggering_actor']['login']}"
 
-# Calculate job duration
-started_at=datetime.strptime(latest_run_data["created_at"], DATE_TIME_FORMAT)
-completed_at=datetime.strptime(latest_run_data["updated_at"], DATE_TIME_FORMAT)
-td = completed_at - started_at
-duration = int(td.total_seconds())
-
 latest_job_info = {
     "gh_repo": name,
     "name": f"{latest_run_data['name']}",
     "date": f"{latest_run_data['created_at']}",
-    "duration": duration,
     "pipeline_url": f"{latest_run_data['html_url']}",
     "triggered_by": triggered_by,
     "commit_url": f"https://github.com/{org}/{name}/commit/{latest_run_data['head_commit']['id']}",
@@ -67,6 +60,12 @@ latest_run_jobs_data = r.json()
 # Get ci job status
 latest_job_info["status"] = latest_run_jobs_data["jobs"][0]["status"]
 latest_job_info["conclusion"] = latest_run_jobs_data["jobs"][0]["conclusion"]
+
+# Calculate job duration
+started_at=datetime.strptime(latest_run_jobs_data["jobs"][0]["started_at"], DATE_TIME_FORMAT)
+completed_at=datetime.strptime(latest_run_jobs_data["jobs"][0]["completed_at"], DATE_TIME_FORMAT)
+td = completed_at - started_at
+latest_job_info["duration"] = int(td.total_seconds())
 
 # Get status of job steps
 latest_job_info["builded"] = None
