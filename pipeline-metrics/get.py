@@ -169,4 +169,4 @@ s3.meta.client.upload_file(Filename=f"{org}_latest_full.json", Bucket=aws_s3_buc
 s3.meta.client.upload_file(Filename=f"{org}_status.json", Bucket=aws_s3_bucket, Key=f"{org}_status.json")
 s3.meta.client.upload_file(Filename=f"{name}_duration.json", Bucket=aws_s3_bucket, Key=f"{name}_duration.json")
 
-print("******************************************\n***  pipeline metrics uploaded to s3 ***\n******************************************")
+print("****************************************\n***  pipeline metrics uploaded to s3 ***\n****************************************")
