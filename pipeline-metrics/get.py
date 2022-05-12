@@ -54,8 +54,6 @@ latest_job_info = {
     "gh_repo": name,
     "name": f"{latest_run_data['name']}",
     "date": f"{latest_run_data['created_at']}",
-    "status": f"{latest_run_data['status']}",
-    "conclusion": f"{latest_run_data['conclusion']}",
     "duration": duration,
     "pipeline_url": f"{latest_run_data['html_url']}",
     "triggered_by": triggered_by,
@@ -65,6 +63,10 @@ latest_job_info = {
 # Get latest run jobs info
 r = requests.get(url=f"{url}/{latest_run_id}/jobs", headers=headers)
 latest_run_jobs_data = r.json()
+
+# Get ci job status
+latest_job_info["status"] = latest_run_jobs_data["jobs"][0]["status"]
+latest_job_info["conclusion"] = latest_run_jobs_data["jobs"][0]["conclusion"]
 
 # Get status of job steps
 latest_job_info["builded"] = None
