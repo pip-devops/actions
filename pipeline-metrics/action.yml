@@ -1,0 +1,19 @@
+name: Pipeline metrics 
+description: Get github latest pipeline metrics and update s3 json file 
+
+inputs:
+  pypi-user:
+    description: 'Username of pypi.org account to create a release'
+    required: true
+
+runs:
+  using: "composite"
+  steps: 
+  
+    - name: Install prereq for python script
+      run: pip install boto3
+      shell: bash
+   
+    - name: Run script to get metrics and update s3 file
+      run: ./get.py
+      shell: bash
