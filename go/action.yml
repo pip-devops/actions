@@ -35,11 +35,7 @@ runs:
         sudo apt-get install -y powershell
       shell: bash
 
-    ############# Build and test #############
-    
-    # - name: Build the component
-    #   run: ./build.ps1
-    #   shell: bash
+    ############# Test #############
 
     - name: Test the component
       run: ./test.ps1
