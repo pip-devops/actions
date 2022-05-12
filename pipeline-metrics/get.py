@@ -23,10 +23,6 @@ session = boto3.Session(
 )
 s3 = session.resource('s3')
 
-# org = "pip-services3-gox"
-# name = "pip-services3-components-gox"
-
-
 url = f"https://api.github.com/repos/{org}/{name}/actions/runs"
 headers = {"Accept":"application/vnd.github.v3+json", "Authorization":f"token {github_token}"}
 
