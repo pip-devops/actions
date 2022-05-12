@@ -30,8 +30,5 @@ runs:
       shell: bash
    
     - name: Run script to get metrics and update s3 file
-      run: |
-        pwd
-        ls -al
-        ${{ github.action_path }}/get.py ${{ inputs.pipeline-organization }} ${{ inputs.pipeline-name }} ${{ inputs.aws-access-key-id }} ${{ inputs.aws-secret-access-key }} ${{ inputs.aws-s3-bucket }} ${{ inputs.github-token }}
+      run: python ${{ github.action_path }}/get.py ${{ inputs.pipeline-organization }} ${{ inputs.pipeline-name }} ${{ inputs.aws-access-key-id }} ${{ inputs.aws-secret-access-key }} ${{ inputs.aws-s3-bucket }} ${{ inputs.github-token }}
       shell: bash
