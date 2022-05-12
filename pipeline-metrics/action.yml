@@ -26,9 +26,9 @@ runs:
   steps: 
   
     - name: Install prereq for python script
-      run: pip install boto3
+      run: pip3 install boto3
       shell: bash
    
     - name: Run script to get metrics and update s3 file
-      run: python ${{ github.action_path }}/get.py ${{ inputs.pipeline-organization }} ${{ inputs.pipeline-name }} ${{ inputs.aws-access-key-id }} ${{ inputs.aws-secret-access-key }} ${{ inputs.aws-s3-bucket }} ${{ inputs.github-token }}
+      run: python3 ${{ github.action_path }}/get.py ${{ inputs.pipeline-organization }} ${{ inputs.pipeline-name }} ${{ inputs.aws-access-key-id }} ${{ inputs.aws-secret-access-key }} ${{ inputs.aws-s3-bucket }} ${{ inputs.github-token }}
       shell: bash
