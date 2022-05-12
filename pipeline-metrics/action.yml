@@ -2,8 +2,23 @@ name: Pipeline metrics
 description: Get github latest pipeline metrics and update s3 json file 
 
 inputs:
-  pypi-user:
-    description: 'Username of pypi.org account to create a release'
+  pipeline-organization:
+    description: 'Github pipeline repository organization'
+    required: true
+  pipeline-name:
+    description: 'Github pipeline repository name'
+    required: true
+  aws-access-key-id:
+    description: 'AWS access key id account where to put json file on s3'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS secret access key account where to put json file on s3'
+    required: true
+  aws-s3-bucket:
+    description: 'AWS s3 bucket name'
+    required: true
+  github-token:
+    description: 'Github token of user which will make API requests to gather metrics'
     required: true
 
 runs:
@@ -15,5 +30,5 @@ runs:
       shell: bash
    
     - name: Run script to get metrics and update s3 file
-      run: ./get.py
+      run: ./get.py ${{ inputs.pipeline-organization }} ${{ inputs.pipeline-name }} ${{ inputs.aws-access-key-id }} ${{ inputs.aws-secret-access-key }} ${{ inputs.aws-s3-bucket }} ${{ inputs.github-token }}
       shell: bash

@@ -9,7 +9,7 @@ from datetime import datetime
 
 DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
-owner = sys.argv[1]
+org = sys.argv[1]
 name = sys.argv[2]
 aws_access_key_id = sys.argv[3]
 aws_secret_access_key = sys.argv[4]
@@ -23,11 +23,11 @@ session = boto3.Session(
 )
 s3 = session.resource('s3')
 
-# owner = "pip-services3-gox"
+# org = "pip-services3-gox"
 # name = "pip-services3-components-gox"
 
 
-url = f"https://api.github.com/repos/{owner}/{name}/actions/runs"
+url = f"https://api.github.com/repos/{org}/{name}/actions/runs"
 headers = {"Accept":"application/vnd.github.v3+json", "Authorization":f"token {github_token}"}
 
 # Get actions runs 
@@ -36,7 +36,7 @@ workflow_runs_data = r.json()
 
 # print(workflow_runs_data)
 if workflow_runs_data["total_count"] == 0:
-    raise Exception(f"Missing workflow for {owner}/{name}")
+    raise Exception(f"Missing workflow for {org}/{name}")
 latest_run_id = workflow_runs_data["workflow_runs"][0]["id"]
 
 # Get latest run info
@@ -63,7 +63,7 @@ latest_job_info = {
     "duration": duration,
     "pipeline_url": f"{latest_run_data['html_url']}",
     "triggered_by": triggered_by,
-    "commit_url": f"https://github.com/{owner}/{name}/commit/{latest_run_data['head_commit']['id']}",
+    "commit_url": f"https://github.com/{org}/{name}/commit/{latest_run_data['head_commit']['id']}",
 }
 
 # Get latest run jobs info
@@ -112,11 +112,11 @@ for step in latest_run_jobs_data["jobs"][0]["steps"]:
 # Read pipelines info file
 s3_objects = s3.meta.client.list_objects(Bucket=aws_s3_bucket)
 for s3_file in s3_objects["Contents"]:
-    if s3_file["Key"] == f"{owner}_latest_full.json":
-        s3.meta.client.download_file(Bucket=aws_s3_bucket, Key=f"{owner}_latest_full.json", Filename=f"{owner}_latest_full.json")
+    if s3_file["Key"] == f"{org}_latest_full.json":
+        s3.meta.client.download_file(Bucket=aws_s3_bucket, Key=f"{org}_latest_full.json", Filename=f"{org}_latest_full.json")
 
-if os.path.exists(f"{owner}_latest_full.json"):
-    with open(f"{owner}_latest_full.json", "r") as f:
+if os.path.exists(f"{org}_latest_full.json"):
+    with open(f"{org}_latest_full.json", "r") as f:
         latest_pipelines = json.loads(f.read())
 
     new_pipeline = True
@@ -159,14 +159,14 @@ for pipeline in new_latest_pipelines:
         pipelines_group_status["published"] += 1
 
 # Save results to files
-with open(f"{owner}_latest_full.json", "w") as f:
+with open(f"{org}_latest_full.json", "w") as f:
     json.dump(new_latest_pipelines, f)
-with open(f"{owner}_status.json", "w") as f:
+with open(f"{org}_status.json", "w") as f:
     json.dump(pipelines_group_status, f)
 with open(f"{name}_duration.json", "w") as f:
     json.dump(steps_duration, f)
 
 # Upload to s3
-s3.meta.client.upload_file(Filename=f"{owner}_latest_full.json", Bucket=aws_s3_bucket, Key=f"{owner}_latest_full.json")
-s3.meta.client.upload_file(Filename=f"{owner}_status.json", Bucket=aws_s3_bucket, Key=f"{owner}_status.json")
+s3.meta.client.upload_file(Filename=f"{org}_latest_full.json", Bucket=aws_s3_bucket, Key=f"{org}_latest_full.json")
+s3.meta.client.upload_file(Filename=f"{org}_status.json", Bucket=aws_s3_bucket, Key=f"{org}_status.json")
 s3.meta.client.upload_file(Filename=f"{name}_duration.json", Bucket=aws_s3_bucket, Key=f"{name}_duration.json")
