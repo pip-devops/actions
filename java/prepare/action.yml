@@ -1,6 +1,11 @@
 name: GitHub action prepare for pipeline in Java
 description: GitHub action prepare for pipeline in Java
 
+inputs:
+  java-version:
+    description: 'Version of java'
+    required: true
+
 outputs:
   build_number: 
     description: "Build number"
@@ -35,6 +40,11 @@ runs:
         sudo apt-get update
         sudo apt-get install -y powershell
       shell: bash
+
+    - name: Setup JDK ${{ inputs.java-version }}
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ inputs.java-version }}
 
     - name: Install maven
       run: |

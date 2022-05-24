@@ -2,6 +2,9 @@ name: GitHub action for pipeline in Java
 description: GitHub action for pipeline in Java
 
 inputs:
+  java-version:
+    description: 'Version of java'
+    required: true
   m2-user:
     description: 'Username of mvn account to create release'
     required: true
@@ -55,6 +58,11 @@ runs:
         sudo apt-get update
         sudo apt-get install -y powershell
       shell: bash
+
+    - name: Setup JDK ${{ inputs.java-version }}
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ inputs.java-version }}
 
     - name: Install maven
       run: |
