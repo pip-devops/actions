@@ -4,7 +4,8 @@ description: GitHub action for pipeline in Java
 inputs:
   java-version:
     description: 'Version of java'
-    required: true
+    required: false
+    default: 15.0.1
   m2-user:
     description: 'Username of mvn account to create release'
     required: true

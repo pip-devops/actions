@@ -4,7 +4,8 @@ description: GitHub action prepare for pipeline in Java
 inputs:
   java-version:
     description: 'Version of java'
-    required: true
+    required: false
+    default: 15.0.1
 
 outputs:
   build_number: 
