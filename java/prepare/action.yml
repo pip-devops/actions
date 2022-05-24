@@ -1,4 +1,5 @@
 name: GitHub action prepare for pipeline in Java
+description: GitHub action prepare for pipeline in Java
 
 outputs:
   build_number: 

@@ -1,4 +1,5 @@
 name: GitHub action for pipeline in Java
+description: GitHub action for pipeline in Java
 
 inputs:
   m2-user:
@@ -7,11 +8,14 @@ inputs:
   m2-pass:
     description: 'Password of mvn account to create release'
     required: true
-  gpg-username:
-    description: 'GPG username to create release'
+  gpg-public-key:
+    description: 'GPG public key'
     required: true
-  gpg-email:
-    description: 'User email to create release'
+  gpg-private-key:
+    description: 'GPG private key'
+    required: true
+  gpg-keyname:
+    description: 'GPG keyname to create release'
     required: true
   gpg-passphrase:
     description: 'GPG phrase to create release'
@@ -75,8 +79,9 @@ runs:
       env:
         M2_USER: ${{ inputs.m2-user }}
         M2_PASS: ${{ inputs.m2-pass }}
-        GPG_USERNAME: ${{ inputs.gpg-username }}
-        GPG_EMAIL: ${{ inputs.gpg-email }}
+        GPG_PUBLIC_KEY: ${{ inputs.gpg-public-key }}
+        GPG_PRIVATE_KEY: ${{ inputs.gpg-private-key }}
+        GPG_KEYNAME: ${{ inputs.gpg-keyname }}
         GPG_PASSPHRASE: ${{ inputs.gpg-passphrase }}
       shell: bash
 

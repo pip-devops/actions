@@ -1,4 +1,5 @@
 name: GitHub action build for pipeline in Java
+description: GitHub action build for pipeline in Java
 
 runs:
   using: "composite"
