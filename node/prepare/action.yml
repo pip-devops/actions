@@ -1,4 +1,5 @@
 name: GitHub action prepare for pipeline in Node.js
+description: GitHub action prepare for pipeline in Node.js
 
 outputs:
   build_number: 

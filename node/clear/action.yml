@@ -1,4 +1,5 @@
 name: GitHub action clear for pipeline in Node.js
+description: GitHub action clear for pipeline in Node.js
 
 runs:
   using: "composite"

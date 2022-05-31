@@ -1,15 +1,19 @@
 name: GitHub action for pipeline in Node.js
+description: GitHub action for pipeline in Node.js
 
 inputs:
   npm-user:
     description: 'Username of npm account to create release'
-    required: true
+    required: false
   npm-pass:
     description: 'Password of npm account to create release'
-    required: true
+    required: false
   npm-email:
     description: 'Email of npm account to create release'
-    required: true
+    required: false
+  npm-token:
+    description: 'Publish token for npm release'
+    required: false
 
 outputs:
   build_number: 
@@ -72,6 +76,7 @@ runs:
         NPM_USER: ${{ inputs.npm-user }}
         NPM_PASS: ${{ inputs.npm-pass }}
         NPM_EMAIL: ${{ inputs.npm-email }}
+        NPM_TOKEN: ${{ inputs.npm-token }}
       shell: bash
 
     ############# Clear #############
