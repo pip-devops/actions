@@ -1,4 +1,5 @@
 name: GitHub action test for pipeline in Go
+description: GitHub action test for pipeline in Go
 
 runs:
   using: "composite"

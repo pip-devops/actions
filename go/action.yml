@@ -1,4 +1,5 @@
 name: GitHub action for pipeline in Go
+description: GitHub action for pipeline in Go
 
 outputs:
   build_number: 
@@ -39,16 +40,6 @@ runs:
 
     - name: Test the component
       run: ./test.ps1
-      shell: bash
-
-    ############# Release #############
-
-    - name: Release binary artifacts
-      run: ./release.ps1
-      env:
-        NPM_USER: ${{ inputs.npm-user }}
-        NPM_PASS: ${{ inputs.npm-pass }}
-        NPM_EMAIL: ${{ inputs.npm-email }}
       shell: bash
 
     ############# Clear #############

@@ -1,4 +1,5 @@
 name: GitHub action prepare for pipeline in Go
+description: GitHub action prepare for pipeline in Go
 
 outputs:
   build_number: 
