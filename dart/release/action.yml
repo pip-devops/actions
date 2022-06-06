@@ -1,0 +1,12 @@
+name: GitHub action release for pipeline in Dart
+description:  GitHub action release for pipeline in Dart
+
+runs:
+  using: "composite"
+  steps: 
+  
+    ############# Release #############
+
+    - name: Release binary artifacts
+      run: ./release.ps1
+      shell: bash

@@ -1,0 +1,13 @@
+name: GitHub action clear for pipeline in Dart
+description: GitHub action clear for pipeline in Dart
+
+runs:
+  using: "composite"
+  steps: 
+
+    ############# Clear #############
+
+    - name: Clean temporary build artifacts
+      run: ./clean.ps1
+      shell: bash
+    

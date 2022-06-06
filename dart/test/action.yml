@@ -1,0 +1,13 @@
+name: GitHub action test for pipeline in Dart
+description: GitHub action test for pipeline in Dart
+
+runs:
+  using: "composite"
+  steps: 
+
+    ############# Test #############
+
+    - name: Test the component
+      run: ./test.ps1
+      shell: bash
+    
