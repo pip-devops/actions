@@ -37,10 +37,4 @@ runs:
       shell: bash
 
     - name: Install Dart
-      run: |
-        sudo apt-add-repository ppa:dartsim/ppa
-        sudo apt-get update
-        sudo apt-get install libdart6-dev
-        sudo apt-get install libdart6-collision-bullet-dev
-        sudo apt-get install libdart6-all-dev
-      shell: bash
+      uses: dart-lang/setup-dart@v1.3
