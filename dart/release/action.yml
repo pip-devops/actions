@@ -1,6 +1,20 @@
 name: GitHub action release for pipeline in Dart
 description:  GitHub action release for pipeline in Dart
 
+inputs:
+  pub-dev-publish-access-token:
+    description: 'Access token for pub.dev credentials.json'
+    required: true
+  pub-dev-publish-refresh-token:
+    description: 'Refresh token for pub.dev credentials.json'
+    required: true
+  pub-dev-publish-token-endpoint:
+    description: 'Token endpoint for pub.dev credentials.json'
+    required: true
+  pub-dev-publish-expiration:
+    description: 'Expiration for pub.dev credentials.json'
+    required: true
+
 runs:
   using: "composite"
   steps: 
@@ -9,4 +23,9 @@ runs:
 
     - name: Release binary artifacts
       run: ./release.ps1
+      env:
+        PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ inputs.pub-dev-publish-access-token }}
+        PUB_DEV_PUBLISH_REFRESH_TOKEN: ${{ inputs.pub-dev-publish-refresh-token }}
+        PUB_DEV_PUBLISH_TOKEN_ENDPOINT: ${{ inputs.pub-dev-publish-token-endpoint }}
+        PUB_DEV_PUBLISH_EXPIRATION: ${{ inputs.pub-dev-publish-expiration }}
       shell: bash
