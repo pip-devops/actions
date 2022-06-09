@@ -85,7 +85,7 @@ for step in latest_run_jobs_data["jobs"][0]["steps"]:
             latest_job_info["tested"] = True
         else:
             latest_job_info["tested"] = False
-    elif step["name"].split(" ")[0].lower() == "clean":
+    elif step["name"].split(" ")[0].lower() == "release":
         if step["conclusion"] == "success":
             latest_job_info["published"] = True
         else:
