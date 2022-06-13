@@ -51,3 +51,7 @@ runs:
       with:
         java-version: ${{ inputs.java-version }}
         maven-version: ${{ inputs.maven-version }}
+
+    - name: Restart gpg
+      run: ${{ github.action_path }}/configure_gpg.sh
+      shell: bash
