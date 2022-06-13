@@ -47,10 +47,7 @@ runs:
       shell: bash
 
     - name: Setup JDK ${{ inputs.java-version }} and maven ${{ inputs.maven-version }}
-      uses: actions/setup-java@v1
+      uses: s4u/setup-maven-action@v1.2.1
       with:
         java-version: ${{ inputs.java-version }}
-      # uses: s4u/setup-maven-action@v1.2.1
-      # with:
-      #   java-version: ${{ inputs.java-version }}
-      #   maven-version: ${{ inputs.maven-version }}
+        maven-version: ${{ inputs.maven-version }}
