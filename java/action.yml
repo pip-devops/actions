@@ -5,7 +5,11 @@ inputs:
   java-version:
     description: 'Version of java'
     required: false
-    default: 15.0.1
+    default: 18.0.1
+  maven-version:
+    description: 'Version of maven'
+    required: false
+    default: 3.8.5
   m2-user:
     description: 'Username of mvn account to create release'
     required: true
@@ -60,16 +64,11 @@ runs:
         sudo apt-get install -y powershell
       shell: bash
 
-    - name: Setup JDK ${{ inputs.java-version }}
-      uses: actions/setup-java@v1
+    - name: Setup JDK ${{ inputs.java-version }} and maven ${{ inputs.maven-version }}
+      uses: s4u/setup-maven-action@v1.2.1
       with:
         java-version: ${{ inputs.java-version }}
-
-    - name: Install maven
-      run: |
-        sudo apt-get update && sudo apt-get upgrade
-        sudo apt-get -y install maven
-      shell: bash
+        maven-version: ${{ inputs.maven-version }}
 
     ############# Build and test #############
     
