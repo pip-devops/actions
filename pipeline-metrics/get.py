@@ -70,7 +70,7 @@ latest_job_info["duration"] = int(td.total_seconds())
 latest_job_info["builded"] = None
 latest_job_info["tested"] = None
 latest_job_info["published"] = None
-latest_job_info["deployed"] = None
+latest_job_info["released"] = None
 steps_duration = []
 
 for step in latest_run_jobs_data["jobs"][0]["steps"]:
@@ -84,16 +84,16 @@ for step in latest_run_jobs_data["jobs"][0]["steps"]:
             latest_job_info["tested"] = True
         else:
             latest_job_info["tested"] = False
-    elif step["name"].split(" ")[0].lower() == "release":
+    elif step["name"].split(" ")[0].lower() == "publish":
         if step["conclusion"] == "success":
             latest_job_info["published"] = True
         else:
             latest_job_info["published"] = False
-    elif step["name"].split(" ")[0].lower() == "deploy":
+    elif step["name"].split(" ")[0].lower() == "release":
         if step["conclusion"] == "success":
-            latest_job_info["deployed"] = True
+            latest_job_info["released"] = True
         else:
-            latest_job_info["deployed"] = False
+            latest_job_info["released"] = False
     
     # Get step duration
     started_at=datetime.strptime(f'{step["started_at"].split(".")[0]}Z', DATE_TIME_FORMAT)
