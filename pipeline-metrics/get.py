@@ -197,7 +197,7 @@ with open(f"{org}_latest_full.json", "w") as f:
     json.dump(new_latest_pipelines, f)
 with open(f"{org}_status.json", "w") as f:
     json.dump(pipelines_group_status, f)
-with open(f"{org}_total_status.json", "w") as f:
+with open("total_status.json", "w") as f:
     json.dump(total_status, f)
 with open(f"{name}_duration.json", "w") as f:
     json.dump(steps_duration, f)
@@ -205,7 +205,7 @@ with open(f"{name}_duration.json", "w") as f:
 # Upload to s3
 s3.meta.client.upload_file(Filename=f"{org}_latest_full.json", Bucket=aws_s3_bucket, Key=f"{org}_latest_full.json")
 s3.meta.client.upload_file(Filename=f"{org}_status.json", Bucket=aws_s3_bucket, Key=f"{org}_status.json")
-s3.meta.client.upload_file(Filename=f"{org}_total_status.json", Bucket=aws_s3_bucket, Key=f"{org}_total_status.json")
+s3.meta.client.upload_file(Filename="total_status.json", Bucket=aws_s3_bucket, Key="total_status.json")
 s3.meta.client.upload_file(Filename=f"{name}_duration.json", Bucket=aws_s3_bucket, Key=f"durations/{name}_duration.json")
 
 print("****************************************\n***  pipeline metrics uploaded to s3 ***\n****************************************")
