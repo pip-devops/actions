@@ -167,7 +167,8 @@ for pipeline in new_latest_pipelines:
 if "Contents" in s3_objects:
     for s3_file in s3_objects["Contents"]:
         if "_status.json" in s3_file["Key"]:
-            s3.meta.client.download_file(Bucket=aws_s3_bucket, Key=s3_file["Key"], Filename=s3_file["Key"])
+            if (s3_file["Key"] != "total_status.json"): #ignore total_status
+                s3.meta.client.download_file(Bucket=aws_s3_bucket, Key=s3_file["Key"], Filename=s3_file["Key"])
 
 total_status = {
     "date": now_formated,
@@ -181,17 +182,17 @@ total_status = {
 }
 status_files = glob.glob("*_status.json")
 for status_file in status_files:
-    print(f"reading {status_file}")
-    with open(status_file, "r") as f:
-        status = json.loads(f.read())
-    total_status["total"] += status["total"]
-    total_status["success"] += status["success"]
-    total_status["failed"] += status["failed"]
-    total_status["builded"] += status["builded"]
-    total_status["tested"] += status["tested"]
-    total_status["published"] += status["published"]
-    total_status["released"] += status["released"]
-
+    if (status_file != "total_status.json"): #ignore total_status
+        with open(status_file, "r") as f:
+            status = json.loads(f.read())
+        total_status["total"] += status["total"]
+        total_status["success"] += status["success"]
+        total_status["failed"] += status["failed"]
+        total_status["builded"] += status["builded"]
+        total_status["tested"] += status["tested"]
+        total_status["published"] += status["published"]
+        total_status["released"] += status["released"]
+        
 # Save results to files
 with open(f"{org}_latest_full.json", "w") as f:
     json.dump(new_latest_pipelines, f)
