@@ -45,8 +45,8 @@ if 'triggering_actor' in latest_run_data:
   triggered_by = f"{latest_run_data['triggering_actor']['login']}"
 
 latest_job_info = {
-    "gh_repo": name,
-    "name": f"{latest_run_data['name']}",
+    "name": name,
+    "full_name": f"{latest_run_data['name']}",
     "date": f"{latest_run_data['created_at']}",
     "pipeline_url": f"{latest_run_data['html_url']}",
     "triggered_by": triggered_by,
@@ -58,8 +58,7 @@ r = requests.get(url=f"{url}/{latest_run_id}/jobs", headers=headers)
 latest_run_jobs_data = r.json()
 
 # Get ci job status
-latest_job_info["status"] = latest_run_jobs_data["jobs"][0]["status"]
-latest_job_info["conclusion"] = latest_run_jobs_data["jobs"][0]["conclusion"]
+latest_job_info["status"] = latest_run_jobs_data["jobs"][0]["conclusion"]
 
 # Calculate job duration
 started_at=datetime.strptime(latest_run_jobs_data["jobs"][0]["started_at"], DATE_TIME_FORMAT)
@@ -140,20 +139,27 @@ pipelines_group_status = {
     "failed": 0,
     "builded": 0,
     "tested": 0,
-    "published": 0
+    "published": 0,
+    "released": 0
 }
 for pipeline in new_latest_pipelines:
     pipelines_group_status["total"] += 1
-    if pipeline["conclusion"] == "success":
+    if pipeline["status"] == "success":
         pipelines_group_status["success"] += 1
     else:
         pipelines_group_status["failed"] += 1
-    if pipeline["builded"]:
-        pipelines_group_status["builded"] += 1
-    if pipeline["tested"]:
-        pipelines_group_status["tested"] += 1
-    if pipeline["published"]:
-        pipelines_group_status["published"] += 1
+    if pipeline.get("builded") is not None:
+        if pipeline["builded"]:
+            pipelines_group_status["builded"] += 1
+    if pipeline.get("tested") is not None:
+        if pipeline["tested"]:
+            pipelines_group_status["tested"] += 1
+    if pipeline.get("published") is not None:
+        if pipeline["published"]:
+            pipelines_group_status["published"] += 1
+    if pipeline.get("released") is not None:
+        if pipeline["released"]:
+            pipelines_group_status["released"] += 1
 
 # Save results to files
 with open(f"{org}_latest_full.json", "w") as f:
@@ -166,6 +172,6 @@ with open(f"{name}_duration.json", "w") as f:
 # Upload to s3
 s3.meta.client.upload_file(Filename=f"{org}_latest_full.json", Bucket=aws_s3_bucket, Key=f"{org}_latest_full.json")
 s3.meta.client.upload_file(Filename=f"{org}_status.json", Bucket=aws_s3_bucket, Key=f"{org}_status.json")
-s3.meta.client.upload_file(Filename=f"{name}_duration.json", Bucket=aws_s3_bucket, Key=f"{name}_duration.json")
+s3.meta.client.upload_file(Filename=f"{name}_duration.json", Bucket=aws_s3_bucket, Key=f"durations/{name}_duration.json")
 
 print("****************************************\n***  pipeline metrics uploaded to s3 ***\n****************************************")
