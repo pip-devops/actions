@@ -5,6 +5,7 @@ import requests
 import os
 import sys
 import boto3
+import glob
 from datetime import datetime
 
 DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
@@ -161,17 +162,50 @@ for pipeline in new_latest_pipelines:
         if pipeline["released"]:
             pipelines_group_status["released"] += 1
 
+# Calculate status of all repo groups in bucket
+# Download all status files from bucket
+if "Contents" in s3_objects:
+    for s3_file in s3_objects["Contents"]:
+        if "_status.json" in s3_file["Key"]:
+            s3.meta.client.download_file(Bucket=aws_s3_bucket, Key=s3_file["Key"], Filename=s3_file["Key"])
+
+total_status = {
+    "date": now_formated,
+    "total": 0,
+    "success": 0,
+    "failed": 0,
+    "builded": 0,
+    "tested": 0,
+    "published": 0,
+    "released": 0
+}
+status_files = glob.glob("*_status.json")
+for status_file in status_files:
+    print(f"reading {status_file}")
+    with open(status_file, "r") as f:
+        status = json.loads(f.read())
+    total_status["total"] += status["total"]
+    total_status["success"] += status["success"]
+    total_status["failed"] += status["failed"]
+    total_status["builded"] += status["builded"]
+    total_status["tested"] += status["tested"]
+    total_status["published"] += status["published"]
+    total_status["released"] += status["released"]
+
 # Save results to files
 with open(f"{org}_latest_full.json", "w") as f:
     json.dump(new_latest_pipelines, f)
 with open(f"{org}_status.json", "w") as f:
     json.dump(pipelines_group_status, f)
+with open(f"{org}_total_status.json", "w") as f:
+    json.dump(total_status, f)
 with open(f"{name}_duration.json", "w") as f:
     json.dump(steps_duration, f)
 
 # Upload to s3
 s3.meta.client.upload_file(Filename=f"{org}_latest_full.json", Bucket=aws_s3_bucket, Key=f"{org}_latest_full.json")
 s3.meta.client.upload_file(Filename=f"{org}_status.json", Bucket=aws_s3_bucket, Key=f"{org}_status.json")
+s3.meta.client.upload_file(Filename=f"{org}_total_status.json", Bucket=aws_s3_bucket, Key=f"{org}_total_status.json")
 s3.meta.client.upload_file(Filename=f"{name}_duration.json", Bucket=aws_s3_bucket, Key=f"durations/{name}_duration.json")
 
 print("****************************************\n***  pipeline metrics uploaded to s3 ***\n****************************************")
